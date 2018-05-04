@@ -166,7 +166,6 @@
 			handler(index) {
 				this.selectedTime = time.getThisTime2()[index]
 				this.getWeekTimeLong = time.getThisTime3()[index];
-				this.getWeekTimeLong = time.getThisTime3()[n];
 				let self = this;
 
 				axios.get(address + 'index/api/getRecipes', {
