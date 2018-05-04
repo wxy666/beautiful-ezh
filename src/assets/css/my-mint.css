@@ -1,0 +1,79 @@
+@charset "utf-8";
+.mint-header {
+	background-color: #ff7800;
+}
+
+.mint-button:not(.is-disabled):active::after {
+	opacity: .2/* .6 */
+}
+
+.mint-button--primary {
+	background-color: #ff7800;
+}
+
+.mint-button--primary.is-plain {
+	border: 1px solid #ff7800;
+	color: #ff7800
+}
+
+.mint-badge.is-primary {
+	background-color: #ff7800
+}
+
+.mint-switch-input:checked+.mint-switch-core {
+	border-color: #ff7800;
+	background-color: #ff7800;
+}
+
+.mint-navbar .mint-tab-item.is-selected {
+	border-bottom: 3px solid #ff7800;
+	color: #ff7800;
+}
+
+.mint-tabbar>.mint-tab-item.is-selected {
+	color: #ff7800;
+}
+
+.mint-searchbar-cancel {
+	color: #ff7800;
+}
+
+.mint-checkbox-input:checked+.mint-checkbox-core {
+	background-color: #ff7800;
+	border-color: #ff7800;
+}
+
+.mint-radio-input:checked+.mint-radio-core {
+	background-color: #ff7800;
+	border-color: #ff7800;
+}
+
+.mt-range-progress {
+	background-color: #ff7800;
+}
+
+.mt-progress-progress {
+	background-color: #ff7800;
+}
+
+.mint-msgbox-confirm {
+	color: #ff7800;
+}
+
+.mint-msgbox-confirm:active {
+	color: #ff7800;
+}
+
+.mint-datetime-action {
+	color: #ff7800;
+}
+.mint-msgbox-header{
+		padding: 0;
+		line-height: 2rem;
+		font-weight: normal !important;
+		color: #fff !important;
+		background:#ff7800;
+	}
+	/*#ff7800 ---红*/
+	/*#f6a305 ---橙*/
+	/*#ffc712 ---浅橙*/
