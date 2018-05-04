@@ -53,7 +53,8 @@
 	</div>
 </template>
 <style type="text/css">
-	table,td{
+	table,
+	td {
 		border: 0!important;
 	}
 </style>
@@ -717,6 +718,12 @@
 			// 获取自定义事件
 			getEvents(y, m, d) {
 				if(Object.keys(this.events).length == 0) return false;
+				if(d < 10) {
+					d = '0' + d
+				}
+				if(m < 10) {
+					m = '0' + m
+				}
 				let eventName = this.events[y + "-" + m + "-" + d]
 				let data = {}
 				if(eventName != undefined) {

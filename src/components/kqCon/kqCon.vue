@@ -104,9 +104,9 @@
 					weeks: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
 					months: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
 					events: {
-						'2018-5-2': '<span style="color:#a7d091">已打卡</span>',
-						'2018-5-3': '<span style="color:#ffb58d">未打卡</span>',
-						'2018-5-4': '<span style="color:#ffb58d">未打卡</span>',
+						'2018-05-01': '<span style="color:#a7d091">已打卡</span>',
+						'2018-05-12': '<span style="color:#ffb58d">未打卡</span>',
+						'2018-05-04': '<span style="color:#ffb58d">未打卡</span>',
 					},
 					select(value) {
 						let self = this;
