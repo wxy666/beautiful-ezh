@@ -156,9 +156,16 @@
 					this.$router.push('/Recommond/maillist/contactDetails?name=' + test.name + '&test=' + test.loginName + '&id=' + test.id + '&clientId=' + this.clientId)
 
 				} else {
-
-					this.$router.push('/interact/maillist/mailsingle?name=' + test.name + '&test=' + test.loginName + '&id=' + test.id + '&clientId=' + this.clientId)
-
+					this.$router.push({
+						path:"/interact/maillist/mailsingle",
+						query:{
+							name:test.name,
+							test:test.loginName,
+							id:test.id,
+							clientId:this.clientId						
+						}
+					})
+					//this.$router.push('/interact/maillist/mailsingle?name=' + test.name + '&test=' + test.loginName + '&id=' + test.id + '&clientId=' + this.clientId)
 				}
 			},
 			getWebsoket() {

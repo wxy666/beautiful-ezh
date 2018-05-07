@@ -31,8 +31,6 @@
 								</div>
 							</div>
 						</div>
-						<!--<p v-show="end" class="dataP">数据已加载完毕</p>
-						<p v-show="start" class="dataP">数据加载中....</p>-->
 						<load-more v-show="start" :show-loading="true" :tip="tip"></load-more>
 						<load-more v-show="end" :show-loading="false" :tip="b"></load-more>
 					</div>
