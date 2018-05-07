@@ -91,10 +91,6 @@
 						self.$refs.transitionImg.style.display = "none";
 					}
 				}, 3000);
-
-				//				if(getUsert() != undefined) {
-				//					this.$router.push('/Recommond')
-				//				}
 			},
 			changeshow() {
 				console.log(this.value)
