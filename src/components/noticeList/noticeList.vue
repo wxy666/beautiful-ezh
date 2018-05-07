@@ -63,7 +63,6 @@
 			}
 		},
 		created() {
-
 			this.init()
 		},
 		mounted() {
