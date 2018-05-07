@@ -14,25 +14,27 @@
 							<div class="per_con">
 								<div style="border-bottom: 1px solid #f6f5f4; padding-bottom: 0.5rem;">
 									<img class="per_img" :src="imgURL+item.userImageId" onerror="src='static/test/person.png'" alt="" />
-								
-								<div class="per_h1">
-									{{item.from}}教师
-									<img class="ling" src="static/test/flower.png" alt="" />
+
+									<div class="per_h1">
+										{{item.from}}教师
+										<img class="ling" src="static/test/flower.png" alt="" />
+									</div>
+
 								</div>
-								
-								</div>
-							
+
 							</div>
 							<div class="per_text clearfix">
-									<p>{{item.text}}</p>
-									<div class="text-con clearfix">
-										<i class="icon iconfont icon-shanchu" v-if="showIcon"></i>
-										<span class="time">{{item.createTime}}</span>
-									</div>
+								<p>{{item.text}}</p>
+								<div class="text-con clearfix">
+									<i class="icon iconfont icon-shanchu" v-if="showIcon"></i>
+									<span class="time">{{item.createTime}}</span>
 								</div>
+							</div>
 						</div>
-						<p v-show="end" class="dataP">数据已加载完毕</p>
-						<p v-show="start" class="dataP">数据加载中....</p>
+						<!--<p v-show="end" class="dataP">数据已加载完毕</p>
+						<p v-show="start" class="dataP">数据加载中....</p>-->
+						<load-more v-show="start" :show-loading="true" :tip="tip"></load-more>
+						<load-more v-show="end" :show-loading="false" :tip="b"></load-more>
 					</div>
 				</scroll>
 			</div>
@@ -42,9 +44,11 @@
 
 <script>
 	import Scroll from '@/base/scroll/scroll';
+	import { LoadMore } from 'vux'
 	export default {
 		components: {
-			Scroll
+			Scroll,
+			LoadMore
 		},
 		data() {
 			return {
@@ -56,9 +60,12 @@
 				pullup: true,
 				end: false,
 				start: false,
-				imgURL:imgURL,
-				flag:false,
-				showIcon:false
+				imgURL: imgURL,
+				flag: false,
+				showIcon: false,
+				isRefresh: true,
+				tip: '正在加载',
+				b: '暂无数据'
 			}
 		},
 		created() {
@@ -72,14 +79,15 @@
 		},
 		methods: {
 			scrollToEnd() {
-
 				this.OFFSET++;
-				this.init();
+				if(this.isRefresh) {
+					this.init();
+				}
 			},
 			init() {
 				let self = this;
-				if(this.$store.state.userId == 3){
-					self.showIcon =true; 
+				if(this.$store.state.userId == 3) {
+					self.showIcon = true;
 				}
 				this.$nextTick(function() {
 					axios.get(address + 'push/api/getNoticeList', {
@@ -92,28 +100,26 @@
 					}).then((res) => {
 						console.log(res)
 						if(res.data.code == 0) {
-							if(self.test == '') {
-								self.test = res.data.data.list;
-								if(self.test.length < 10){
-									self.start = false;
-									self.end = false;
-									
-								}else{
-									self.start = true
-								}
-							}else {
-								if(res.data.data.list != '') {
-									self.start = true
-									res.data.data.list.forEach(function(data) {
-										self.test.push(data);
-									})
+							if(res.data.data.totalSize != 0) {
+								if(self.test == '') {
+									self.test = res.data.data.list;
 								} else {
-									self.start = false;
-									self.end = true;
+									if(res.data.data.list != '') {
+										self.start = true
+										setTimeout(function() {
+											self.start = false
+											self.test = res.data.data.list.concat(self.test);
+										}, 3000)
+									} else {
+										self.start = false;
+										self.isRefresh = false;
+										self.end = false;
+									}
+
 								}
-
+							}else{
+								self.end = true;
 							}
-
 						}
 					})
 				})
@@ -132,7 +138,6 @@
 		width: 100%;
 		background: #fff;
 		margin-bottom: 1rem;
-
 	}
 	
 	.perList .per_img {
@@ -152,8 +157,7 @@
 		margin-top: 0.1rem;
 		width: 100%;
 		padding: 0.5rem 1rem 0;
-
-	    box-sizing: border-box;
+		box-sizing: border-box;
 	}
 	
 	.per_con .per_h1 {
@@ -175,7 +179,8 @@
 	}
 	
 	.per_text {
-		padding: 0.5rem 0;;
+		padding: 0.5rem 0;
+		;
 		border-bottom: 1px solid #ededed;
 	}
 	
@@ -196,26 +201,30 @@
 		word-wrap: break-word;
 		text-indent: 2em;
 		padding: 0 1rem;
-   		box-sizing: border-box;
+		box-sizing: border-box;
 	}
-	.text-con{
+	
+	.text-con {
 		padding: 0.5rem 0;
 	}
-	.text-con .icon{
+	
+	.text-con .icon {
 		font-size: 2rem;
 		margin-top: 0;
 		float: left;
 		margin-left: 1.5rem;
 	}
-	.text-con .time{
+	
+	.text-con .time {
 		display: inline-block;
 		float: right;
 		line-height: 2rem;
-		padding-right:1rem;
+		padding-right: 1rem;
 		box-sizing: border-box;
 		font-size: 1.1rem;
 		color: #ff9958;
 	}
+	
 	.perPosition {
 		position: absolute;
 		top: 3rem;
@@ -234,6 +243,7 @@
 			width: 20rem;
 		}
 	}
+	
 	@media only screen and (min-width:360px) {
 		.per_con .per_h1 {
 			width: 22rem;
@@ -245,11 +255,13 @@
 			width: 23rem;
 		}
 	}
+	
 	@media only screen and (min-width:414px) {
 		.per_con .per_h1 {
 			width: 24rem;
 		}
 	}
+	
 	.dataP {
 		text-align: center;
 		font-size: 1.1rem;

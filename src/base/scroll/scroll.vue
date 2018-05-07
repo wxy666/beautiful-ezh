@@ -24,12 +24,12 @@
 				type:Boolean,
 				default:false
 			},
-			// 上拉更新
+			// 上拉加载
 			pullup:{
 				type:Boolean,
 				default:false
 			},
-			// 下拉更新
+			// 下拉刷新
 			pulldown:{
 				type:Boolean,
 				default:false
@@ -78,10 +78,11 @@
 						}
 					})
 				}
-				if(this.pulldown){
-					this.scroll.on('scrollEnd',()=>{
-						if(this.scroll.y >= 0){						
-							this.$emit('scrollToEnd',this.scroll.y)
+				if(this.pulldown) {
+					this.scroll.on('touchEnd', (pos) => {
+						// 下拉动作
+						if(pos.y > 50) {
+							this.$emit('pulldown')
 						}
 					})
 				}
