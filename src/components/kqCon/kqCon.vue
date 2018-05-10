@@ -9,10 +9,6 @@
 			<div class="wrap">
 				<div class="wrap-box">
 					<p class="timeP">{{times}}</p>
-					<!--<group>
-						<datetime class="top" v-model="times" :min-year=2017 :max-year=2099 format="YYYY-MM-DD" :end-date="endDate" @on-change="change" year-row="{value}年" month-row="{value}月" day-row="{value}日" confirm-text="确定" cancel-text=" "></datetime>
-					</group>-->
-
 					<scroll class="minHeight">
 						<div>
 							<div class="timeList" v-for="item in timeList" v-show="item.signTime != null">
@@ -22,7 +18,7 @@
 										<img @click="showImgFn(item.picUrl)" :src="item.picUrl? imgURL+item.picUrl : 'static/test/person.png'" onerror="src='static/test/person.png'" alt="" />
 										<p>打卡时间：{{item.signTime}}</p>
 									</div>
-									
+
 								</div>
 							</div>
 							<div class="noTimeList clearfix" v-show="timeList[0] == null">
@@ -30,18 +26,7 @@
 								<p>亲爱的家长,<br/>您的宝宝今天没有打卡哦~</p>
 							</div>
 							<div>
-								<calendar ref="calendar1"
-									 :events="calendar1.events" 
-									 :lunar="calendar1.lunar" 
-									 :value="calendar1.value" 
-									 :begin="calendar1.begin" 
-									 :end="calendar1.end" 
-									 :weeks="calendar1.weeks" 
-									 :months="calendar1.months" 
-									 @select="select"
-									  @selectMonth="calendar1.selectMonth" 
-									  @selectYear="calendar1.selectYear"
-									  ></calendar>
+								<calendar ref="calendar1" :events="calendar1.events" :lunar="calendar1.lunar" :value="calendar1.value" :begin="calendar1.begin" :end="calendar1.end" :weeks="calendar1.weeks" :months="calendar1.months" @select="select" @selectMonth="calendar1.selectMonth" @selectYear="calendar1.selectYear"></calendar>
 								<!--<button @click="changeEvents">异步更新Price</button>
             <button @click="calendar1.value=[2018,1,Math.floor(Math.random()*30+1)]">动态设置日期</button>
             <button @click="$refs.calendar1.setToday()">返回今天</button>-->
@@ -137,14 +122,28 @@
 			} else {
 				this.times = time.getYYMMDD();
 			}
-			//			this.value5 = time.getYYMMDD();
+			let uyear = this.times.substring(0, this.times.indexOf('-'));
+			let umonth = this.times.substring(this.times.indexOf('-') + 1, this.times.lastIndexOf('-'));
+			axios.get(address2 + 'v1.0/terminal/getMonthWorkList', {
+				params: {
+					userId: this.userId,
+					selUserId: this.selUserId,
+					year: uyear,
+					month: umonth,
+					isTemp: false
+				}
+			}).then((resolve) => {
+				this.calendar1.events = resolve.data.data;
+			}).catch((err) => {
+				console.log(err)
+			})
 			this.endDate = time.getYYMMDD();
-			this.calendar1.value = [this.times.split('-')[0],this.times.split('-')[1],this.times.split('-')[2]]
+			this.calendar1.value = [this.times.split('-')[0], this.times.split('-')[1], this.times.split('-')[2]]
 			this.init();
-			console.log(this.times)
 		},
 		methods: {
-			select(value){
+			select(value) {
+				console.log(value)
 				console.log(value.join('-'));
 				this.times = value.join('-');
 				this.init();
@@ -183,6 +182,7 @@
 			},
 			init() {
 				if(this.$store.state.userType == 3 || this.$store.state.userType == 4) {
+					this.times=this.times.replace(/\-/g, "/") //ios下不支持YY-MM-DD
 					axios.get(address2 + 'v1.0/terminal/getWorkDetail', {
 						params: {
 							userId: this.userId,
@@ -191,7 +191,6 @@
 						}
 					}).then((resolve) => {
 						this.timeList = resolve.data.data;
-						console.log(resolve)
 					}).catch((err) => {
 						console.log(err)
 					})
@@ -205,7 +204,6 @@
 						}
 					}).then((resolve) => {
 						this.timeList = resolve.data.data;
-						console.log(resolve)
 					}).catch((err) => {
 						console.log(err)
 
@@ -294,16 +292,16 @@
 		margin-bottom: 1rem;
 	}
 	
-	
-	.timeItem > img{
+	.timeItem>img {
 		display: inline-block;
 		float: left;
 		width: 4rem;
 		height: 4rem;
 		margin-top: 3rem;
-    	margin-left: 1rem;
+		margin-left: 1rem;
 	}
-	.timeItem div{
+	
+	.timeItem div {
 		display: inline-block;
 		float: left;
 		width: 80%;
@@ -319,11 +317,12 @@
 	.timeItem div img {
 		display: inline-block;
 		width: 12rem;
-	    height: 9rem;
-	    margin-top: 1rem;
-	    margin-left: 1rem;
-	    border-radius: 0.5rem;
+		height: 9rem;
+		margin-top: 1rem;
+		margin-left: 1rem;
+		border-radius: 0.5rem;
 	}
+	
 	.timeItem p {
 		display: block;
 		text-indent: 1rem;
@@ -365,7 +364,8 @@
 		left: 50%;
 		transform: translate3d(-50%, -50%, 0);
 	}
-	.timeP{
+	
+	.timeP {
 		line-height: 3rem;
 		text-align: center;
 		background: #fff;

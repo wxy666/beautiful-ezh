@@ -864,7 +864,7 @@
 			// 日期补零
 			zeroPad(n) {
 				return String(n < 10 ? '0' + n : n)
-			},
+			}
 		}
 	}
 </script>
