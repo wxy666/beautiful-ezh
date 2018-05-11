@@ -109,7 +109,7 @@
 			this.list2 = time.getThisTime();
 			this.demo2 = time.getDateWeek();
 			this.selectedTime = time.getDateWeek2();
-			this.getWeekTimeLong = time.getThisTime3()[0]
+			this.getWeekTimeLong = time.everyYYMMDD(new Date()).replace(/\-/g, "/") //ios下不支持YY-MM-DD	
 			this.init();
 		},
 		mounted: function() {
@@ -127,7 +127,6 @@
 			init() {
 				let self = this;
 				this.$nextTick(() => {
-					console.log('时间', self.getWeekTimeLong)
 					axios.get(address + 'index/api/getRecipes', {
 						params: {
 							userId: this.$store.state.userId,
@@ -147,7 +146,6 @@
 								self.targetImg = ''
 							}
 							self.targetImg = res.data.data.img.split(',');
-							//							console.log(self.targetImg)
 						}
 
 					}).catch((err) => {
@@ -158,14 +156,13 @@
 			},
 			a() {
 				this.flag = true;
-				//				this.$refs.food.show();
 				this.selectedTime = this.list2[this.index];
 				this.getWeekTimeLong = time.getThisTime3()[this.index];
 
 			},
 			handler(index) {
 				this.selectedTime = time.getThisTime2()[index]
-				this.getWeekTimeLong = time.getThisTime3()[index];
+				this.getWeekTimeLong = time.getThisTime3()[index].replace(/\-/g, "/") //ios下不支持YY-MM-DD	;
 				let self = this;
 
 				axios.get(address + 'index/api/getRecipes', {

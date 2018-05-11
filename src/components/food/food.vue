@@ -41,7 +41,7 @@
 				</div>
 				<div class="up">
 					<img src="static/test/upload.png" @click.stop="addPic" />
-					<input id="File2" runat="server" @change="changes($event)" type="file" accept="image/*" multiple="multiple" capture="camera" style="display:none" />
+					<input id="File2" runat="server" @change="changes($event)" type="file" accept="image/*"  style="display:none" />
 					<ul class="list-ul clearfix" v-if="flag">
 						<li class="list-li " v-for="(iu, index) in imgUrls2">
 							<a class="list-link" @click='previewImage(iu)'>
@@ -100,12 +100,13 @@
 				if(this.isPublish)return;
 				var params = new URLSearchParams();
 				params.append('userId', this.$store.state.userId);
+				this.longtime=this.longtime.replace(/\-/g, "/") //ios下不支持YY-MM-DD		
 				params.append('createDate', new Date(this.longtime).getTime());
 				params.append('text', '["' + this.morningName1 + '","' + this.morningName2 + '","' + this.middayName1 + '","' + this.middayName2 + '","' + this.eveningName1 + '","' + this.eveningName2 + '"]');
 				params.append('img', this.imgUrls.join(','));
+				alert(params)
 				axios.post(address + 'index/api/iuRecipes', params).then((res) => {
-					if(res.data.code == 0) {
-						
+					if(res.data.code == 0) {			
 						this.imgUrls=[];
 						this.imgUrls2=[];
 						this.comText='';
@@ -119,7 +120,7 @@
 					}
 					console.log(res)
 				}).catch((err) => {
-					console.log(err)
+					alert(error)
 				})
 			},
 			init() {
@@ -149,8 +150,6 @@
 			//input change事件
 			changes(e) {
 				var fileObj = e.currentTarget;
-				console.log(e)
-				console.log(e.currentTarget)
 				var windowURL = window.URL || window.webkitURL;
 				var dataURL;
 				if(fileObj && fileObj.files && fileObj.files[0]) {
@@ -179,7 +178,6 @@
 					if(res.data.code == 0){
 						self.targetImg =res.data.data;
 						self.imgUrls.push(self.targetImg)
-//						self.imgUrls2= self.imgUrls;
 						console.log('imgUrls===>', self.imgUrls)
 						self.isPublish = false;
 					}
